@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 using StackRunner.StackSystem;
 using StackRunner.InputSystem;
 using StackRunner.Extensions;
 
 namespace StackRunner.Player
 {
-    public class Player : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         [SerializeField] private StackPath stackPath;
 
@@ -19,6 +20,8 @@ namespace StackRunner.Player
         private int currentPathNodeIndex;
 
         private bool isMoving;
+
+        public static UnityAction OnPlayerFall;
 
         private void OnEnable()
         {
@@ -74,6 +77,8 @@ namespace StackRunner.Player
 
                 playerRigidbody.isKinematic = false;
                 playerRigidbody.AddForce(Vector3.forward, ForceMode.Impulse);
+
+                OnPlayerFall?.Invoke();
             }
         }
     }

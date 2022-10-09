@@ -4167,7 +4167,7 @@ MonoBehaviour:
   visual: {fileID: 5062883109654775313}
   playerRigidbody: {fileID: 814500810}
   playerAnimator: {fileID: 2115909841}
-  moveSpeed: 3
+  moveSpeed: 2.8
   rotationSpeed: 2
 --- !u!136 &814500809
 CapsuleCollider:

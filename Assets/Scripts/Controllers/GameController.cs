@@ -34,6 +34,19 @@ namespace StackRunner
             InputController.OnTouchDown -= EvaluatePlayerAction;
         }
 
+        public void EvaluatePlayerAction()
+        {
+            if(currentState == GameState.Idle)
+            {
+                StartGame();
+                stackSpawner.SpawnNewStack();
+            }
+            else if(currentState == GameState.Gameplay)
+            {
+                stackPath.ProcessLastStack();
+            }
+        }
+
         public void StartGame()
         {
             currentState = GameState.Gameplay;
@@ -50,19 +63,6 @@ namespace StackRunner
         {
             currentState = GameState.GameLose;
             OnGameLose?.Invoke();
-        }
-
-        public void EvaluatePlayerAction()
-        {
-            if(currentState == GameState.Idle)
-            {
-                StartGame();
-                stackSpawner.SpawnNewStack();
-            }
-            else if(currentState == GameState.Gameplay)
-            {
-                stackPath.ProcessLastStack();
-            }
         }
     }
 }

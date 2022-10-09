@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cinemachine;
+using StackRunner.Player;
 
 namespace StackRunner
 {
@@ -9,12 +10,12 @@ namespace StackRunner
 
         private void OnEnable()
         {
-            GameController.OnGameLose += StopFollowing;
+            PlayerController.OnPlayerFall += StopFollowing;
         }
 
         private void OnDisable()
         {
-            GameController.OnGameLose -= StopFollowing;
+            PlayerController.OnPlayerFall -= StopFollowing;
         }
 
         private void StopFollowing()
