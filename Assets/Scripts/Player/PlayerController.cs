@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 using StackRunner.StackSystem;
-using StackRunner.InputSystem;
 using StackRunner.Extensions;
 
 namespace StackRunner.Player
@@ -25,12 +25,12 @@ namespace StackRunner.Player
 
         private void OnEnable()
         {
-            InputController.OnTouchDown += StartMovement;
+            Stack.OnPlaceStack += StartMovement;
         }
 
         private void OnDisable()
         {
-            InputController.OnTouchDown -= StartMovement;
+            Stack.OnPlaceStack -= StartMovement;
         }
 
         private void Update()
@@ -51,8 +51,12 @@ namespace StackRunner.Player
         {
             isMoving = true;
             playerAnimator.SetBool("IsMoving", isMoving);
+        }
 
-            InputController.OnTouchDown -= StartMovement;
+        private void StopMovement()
+        {
+            isMoving = false;
+            playerAnimator.SetBool("IsMoving", isMoving);
         }
 
         private void Move(Transform target)
@@ -73,12 +77,7 @@ namespace StackRunner.Player
             }
             else
             {
-                isMoving = false;
-
-                playerRigidbody.isKinematic = false;
-                playerRigidbody.AddForce(Vector3.forward, ForceMode.Impulse);
-
-                OnPlayerFall?.Invoke();
+                StopMovement();
             }
         }
     }

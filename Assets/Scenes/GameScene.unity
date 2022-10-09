@@ -4144,7 +4144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814500806}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5062883109654775313}
@@ -4167,7 +4167,7 @@ MonoBehaviour:
   visual: {fileID: 5062883109654775313}
   playerRigidbody: {fileID: 814500810}
   playerAnimator: {fileID: 2115909841}
-  moveSpeed: 2.8
+  moveSpeed: 4
   rotationSpeed: 2
 --- !u!136 &814500809
 CapsuleCollider:
@@ -4467,7 +4467,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 889751898}
   m_LocalRotation: {x: -0.3192946, y: 0.15346383, z: -0.052481066, w: -0.9336732}
-  m_LocalPosition: {x: 1.67, y: 5.65, z: 2.97}
+  m_LocalPosition: {x: 1.67, y: 5.65, z: 5.9700003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1441469549}
@@ -6751,7 +6751,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241037318}
   m_LocalRotation: {x: -0.3192946, y: 0.15346383, z: -0.052481066, w: -0.9336732}
-  m_LocalPosition: {x: 1.67, y: 5.65, z: 2.97}
+  m_LocalPosition: {x: 1.67, y: 5.65, z: 5.9700003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 287089016}

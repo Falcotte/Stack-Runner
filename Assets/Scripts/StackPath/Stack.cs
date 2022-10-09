@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
 namespace StackRunner.StackSystem
 {
@@ -18,66 +19,45 @@ namespace StackRunner.StackSystem
 
         [SerializeField] private float moveSpeed;
 
-        private Vector3 moveDirection;
-        private bool isMoving;
-
         public float StackWidth { get; set; }
         public float LastStackXPosition { get; set; }
 
-        public static UnityAction<Stack> OnPlaceStack;
+        public static UnityAction OnPlaceStack;
 
         private void Start()
         {
-            SetMovementDirection();
-
-            isMoving = true;
-
             StackWidth = stackVisual.localScale.x;
+
+            stackVisual.localScale = Vector3.zero;
+            stackVisual.DOScale(new Vector3(StackWidth, 1f, 3f), .25f).SetEase(Ease.OutBack);
+
+            StartMovement();
         }
 
-        private void Update()
+        public void StartMovement()
         {
-            if(isMoving)
-            {
-                MoveStack();
-            }
-        }
-
-        private void SetMovementDirection()
-        {
-            moveDirection = transform.localPosition.x <= 0f ? Vector3.right : Vector3.left;
-        }
-
-        private void MoveStack()
-        {
-            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
-
-            if((moveDirection.x > 0 && transform.position.x >= LastStackXPosition + StackWidth) || (moveDirection.x < 0 && transform.position.x <= LastStackXPosition - StackWidth))
-            {
-                GameController.Instance.LoseGame();
-
-                isMoving = false;
-                stackRigidbody.isKinematic = false;
-            }
+            transform.DOMoveX((LastStackXPosition - transform.position.x), moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo).SetId("Stack");
         }
 
         public void PlaceStack()
         {
-            if((moveDirection.x > 0 && transform.position.x <= LastStackXPosition - StackWidth) || (moveDirection.x < 0 && transform.position.x >= LastStackXPosition + StackWidth))
+            DOTween.Kill("Stack");
+
+            if(Mathf.Abs(transform.position.x - LastStackXPosition) >= StackWidth)
             {
                 GameController.Instance.LoseGame();
                 stackRigidbody.isKinematic = false;
             }
             else
             {
-                OnPlaceStack?.Invoke(this);
+                OnPlaceStack?.Invoke();
             }
-
-            isMoving = false;
         }
 
         public void CutStack(float previousStackPosition, float cutPosition)
         {
+            DOTween.Kill("Stack");
+
             stackVisual.gameObject.SetActive(false);
             stackCollider.enabled = false;
 
@@ -106,8 +86,7 @@ namespace StackRunner.StackSystem
                 UpdatePlayerMoveTargets(stackParts[0].transform.position.x - StackWidth / 2f);
             }
 
-            OnPlaceStack?.Invoke(this);
-            isMoving = false;
+            OnPlaceStack?.Invoke();
         }
 
         private void UpdatePlayerMoveTargets(float playerMoveTargetPosX)
