@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using DG.Tweening;
 
 namespace StackRunner.StackSystem
@@ -20,6 +21,9 @@ namespace StackRunner.StackSystem
         public List<Transform> PlayerPath => playerPath;
 
         [SerializeField] private float perfectPlacementThreshold;
+
+        public static UnityAction OnPlacement;
+        public static UnityAction OnPerfectPlacement;
 
         private void Start()
         {
@@ -62,16 +66,19 @@ namespace StackRunner.StackSystem
                 stack.transform.DOPunchScale(Vector3.one * .1f, .2f, 1, 1).SetEase(Ease.OutBack);
 
                 stack.PlaceStack();
+                OnPerfectPlacement?.Invoke();
             }
             else if(Mathf.Abs(stackPlacementOffset) <= stack.StackWidth)
             {
                 if(stackPlacementOffset >= 0f)
                 {
                     stack.CutStack(playerPath[playerPath.Count - 1].position.x, playerPath[playerPath.Count - 1].position.x + stack.StackWidth / 2f);
+                    OnPlacement?.Invoke();
                 }
                 else
                 {
                     stack.CutStack(playerPath[playerPath.Count - 1].position.x, playerPath[playerPath.Count - 1].position.x - stack.StackWidth / 2f);
+                    OnPlacement?.Invoke();
                 }
             }
             else
