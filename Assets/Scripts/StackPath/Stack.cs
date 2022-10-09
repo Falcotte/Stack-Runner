@@ -23,6 +23,7 @@ namespace StackRunner.StackSystem
         public float LastStackXPosition { get; set; }
 
         public static UnityAction OnPlaceStack;
+        public static UnityAction OnFailStack;
 
         private void Start()
         {
@@ -47,6 +48,8 @@ namespace StackRunner.StackSystem
             {
                 GameController.Instance.LoseGame();
                 stackRigidbody.isKinematic = false;
+
+                OnFailStack?.Invoke();
             }
             else
             {

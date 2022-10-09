@@ -22,6 +22,7 @@ namespace StackRunner.Player
         private int currentPathNodeIndex;
 
         private bool isMoving;
+        private bool isFailing;
 
         public static UnityAction OnPlayerFall;
         public static UnityAction OnPlayerReachFinishStack;
@@ -29,11 +30,13 @@ namespace StackRunner.Player
         private void OnEnable()
         {
             Stack.OnPlaceStack += StartMovement;
+            Stack.OnFailStack += SetFailMoveTarget;
         }
 
         private void OnDisable()
         {
             Stack.OnPlaceStack -= StartMovement;
+            Stack.OnFailStack -= SetFailMoveTarget;
         }
 
         private void Update()
@@ -80,18 +83,43 @@ namespace StackRunner.Player
             }
             else
             {
-                StopMovement();
-
-                if(GameController.Instance.CurrentState == GameState.GameWin)
+                // Fail condition
+                if(isFailing)
                 {
-                    visual.DOLookAt(transform.position + Vector3.back, .5f).OnComplete(() =>
+                    isMoving = false;
+
+                    playerRigidbody.isKinematic = false;
+                    playerRigidbody.AddForce(Vector3.forward, ForceMode.Impulse);
+
+                    OnPlayerFall?.Invoke();
+                }
+                else // Win condition
+                {
+                    StopMovement();
+
+                    if(GameController.Instance.CurrentState == GameState.GameWin)
                     {
-                        followCameraTarget.DORotate(Vector3.up * 180f, 10f).SetLoops(-1, LoopType.Incremental);
-                        playerAnimator.SetTrigger("Dance");
-                        OnPlayerReachFinishStack?.Invoke();
-                    });
+                        visual.DOLookAt(transform.position + Vector3.back, .5f).OnComplete(() =>
+                        {
+                            followCameraTarget.DORotate(Vector3.up * 180f, 10f).SetLoops(-1, LoopType.Incremental);
+                            playerAnimator.SetTrigger("Dance");
+                            OnPlayerReachFinishStack?.Invoke();
+                        });
+                    }
                 }
             }
+        }
+
+        private void SetFailMoveTarget()
+        {
+            GameObject failMoveTarget = new GameObject();
+            failMoveTarget.transform.position = stackPath.PlayerPath[stackPath.PlayerPath.Count - 1].position + Vector3.forward * 1.5f;
+
+            stackPath.PlayerPath.Add(failMoveTarget.transform);
+
+            isFailing = true;
+            StartMovement();
+            ;
         }
     }
 }
