@@ -1,42 +1,62 @@
 using System.Collections.Generic;
 using UnityEngine;
-using StackRunner.InputSystem;
+using DG.Tweening;
 
 namespace StackRunner.StackSystem
 {
     public class StackPath : MonoBehaviour
     {
-        [SerializeField] private Stack stackPrefab;
+        [SerializeField] private StackSpawner stackSpawner;
 
-        [SerializeField] private float stackSpawnOffset;
-        private Vector3 spawnPosition;
+        [SerializeField] private List<Stack> stacks;
+        public List<Stack> Stacks => stacks;
 
         [SerializeField] private List<Transform> playerPath;
         public List<Transform> PlayerPath => playerPath;
 
-        private void OnEnable()
+        [SerializeField] private float perfectPlacementThreshold;
+
+        public void ProcessLastStack()
         {
-            InputController.OnTouchDown += SpawnNewStack;
-            Stack.OnPlaceStack += UpdatePlayerPath;
+            Stack stackToProcess = stacks[stacks.Count - 1];
+
+            AdjustPlacedStack(stackToProcess);
+
+            if(GameController.Instance.CurrentState == GameState.Gameplay)
+            {
+                UpdatePlayerPath(stackToProcess);
+                stackSpawner.SpawnNewStack();
+            }
         }
 
-        private void OnDisable()
+        private void AdjustPlacedStack(Stack stack)
         {
-            InputController.OnTouchDown -= SpawnNewStack;
-            Stack.OnPlaceStack -= UpdatePlayerPath;
-        }
+            float stackPlacementOffset = stack.transform.position.x - playerPath[playerPath.Count - 1].position.x;
 
-        private void Start()
-        {
-            spawnPosition = Vector3.forward * 12f;
-        }
+            if(Mathf.Abs(stackPlacementOffset) <= perfectPlacementThreshold)
+            {
+                Debug.Log("Perfect placement");
 
-        private void SpawnNewStack()
-        {
-            Vector3 newSpawnPosition = spawnPosition + Mathf.Sign(Random.Range(-1f, 1f)) * Vector3.right * stackSpawnOffset;
-            spawnPosition += Vector3.forward * 3f;
+                stack.transform.DOMoveX(playerPath[playerPath.Count - 1].position.x, .2f);
+                stack.transform.DOPunchScale(Vector3.one * .1f, .2f, 1, 1).SetEase(Ease.OutBack);
 
-            Stack newStack = Instantiate(stackPrefab, newSpawnPosition, Quaternion.identity, transform);
+                stack.PlaceStack();
+            }
+            else if(Mathf.Abs(stackPlacementOffset) <= stack.StackWidth)
+            {
+                if(stackPlacementOffset >= 0f)
+                {
+                    stack.CutStack(playerPath[playerPath.Count - 1].position.x, playerPath[playerPath.Count - 1].position.x + stack.StackWidth / 2f);
+                }
+                else
+                {
+                    stack.CutStack(playerPath[playerPath.Count - 1].position.x, playerPath[playerPath.Count - 1].position.x - stack.StackWidth / 2f);
+                }
+            }
+            else
+            {
+                stack.PlaceStack();
+            }
         }
 
         private void UpdatePlayerPath(Stack stack)

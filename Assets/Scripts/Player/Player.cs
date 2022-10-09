@@ -8,7 +8,10 @@ namespace StackRunner.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] private StackPath stackPath;
+
         [SerializeField] private Transform visual;
+        [SerializeField] private Rigidbody playerRigidbody;
+        [SerializeField] private Animator playerAnimator;
 
         [SerializeField] private float moveSpeed;
         [SerializeField] private float rotationSpeed;
@@ -44,6 +47,7 @@ namespace StackRunner.Player
         private void StartMovement()
         {
             isMoving = true;
+            playerAnimator.SetBool("IsMoving", isMoving);
 
             InputController.OnTouchDown -= StartMovement;
         }
@@ -60,9 +64,16 @@ namespace StackRunner.Player
 
         private void UpdateMoveTarget()
         {
-            if(stackPath.PlayerPath.Count > 0 && currentPathNodeIndex < stackPath.PlayerPath.Count - 1)
+            if(currentPathNodeIndex < stackPath.PlayerPath.Count - 1)
             {
                 currentPathNodeIndex++;
+            }
+            else
+            {
+                isMoving = false;
+
+                playerRigidbody.isKinematic = false;
+                playerRigidbody.AddForce(Vector3.forward, ForceMode.Impulse);
             }
         }
     }
