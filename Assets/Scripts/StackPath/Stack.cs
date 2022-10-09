@@ -74,13 +74,14 @@ namespace StackRunner.StackSystem
             if(transform.position.x < previousStackPosition)
             {
                 stackParts[0].isKinematic = false;
-
+                Destroy(stackParts[0].gameObject, 4f);
                 StackWidth = stackParts[1].transform.localScale.x;
                 UpdatePlayerMoveTargets(stackParts[0].transform.position.x + StackWidth / 2f);
             }
             else // Cut right
             {
                 stackParts[1].isKinematic = false;
+                Destroy(stackParts[1].gameObject, 4f);
 
                 StackWidth = stackParts[0].transform.localScale.x;
                 UpdatePlayerMoveTargets(stackParts[0].transform.position.x - StackWidth / 2f);

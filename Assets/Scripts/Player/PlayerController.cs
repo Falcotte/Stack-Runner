@@ -14,6 +14,8 @@ namespace StackRunner.Player
         [SerializeField] private Rigidbody playerRigidbody;
         [SerializeField] private Animator playerAnimator;
 
+        [SerializeField] private Transform followCameraTarget;
+
         [SerializeField] private float moveSpeed;
         [SerializeField] private float rotationSpeed;
 
@@ -22,6 +24,7 @@ namespace StackRunner.Player
         private bool isMoving;
 
         public static UnityAction OnPlayerFall;
+        public static UnityAction OnPlayerReachFinishStack;
 
         private void OnEnable()
         {
@@ -78,6 +81,16 @@ namespace StackRunner.Player
             else
             {
                 StopMovement();
+
+                if(GameController.Instance.CurrentState == GameState.GameWin)
+                {
+                    visual.DOLookAt(transform.position + Vector3.back, .5f).OnComplete(() =>
+                    {
+                        followCameraTarget.DORotate(Vector3.up * 180f, 10f).SetLoops(-1, LoopType.Incremental);
+                        playerAnimator.SetTrigger("Dance");
+                        OnPlayerReachFinishStack?.Invoke();
+                    });
+                }
             }
         }
     }

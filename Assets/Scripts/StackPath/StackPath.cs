@@ -11,10 +11,20 @@ namespace StackRunner.StackSystem
         [SerializeField] private List<Stack> stacks;
         public List<Stack> Stacks => stacks;
 
+        [SerializeField] private FinishStack finishStack;
+
+        // How many stacks need to be successfully completed to win the level
+        [SerializeField] private int stackCount;
+
         [SerializeField] private List<Transform> playerPath;
         public List<Transform> PlayerPath => playerPath;
 
         [SerializeField] private float perfectPlacementThreshold;
+
+        private void Start()
+        {
+            finishStack.transform.position = playerPath[0].position + Vector3.forward * 3f * stackCount;
+        }
 
         public void ProcessLastStack()
         {
@@ -25,7 +35,18 @@ namespace StackRunner.StackSystem
             if(GameController.Instance.CurrentState == GameState.Gameplay)
             {
                 UpdatePlayerPath(stackToProcess);
-                stackSpawner.SpawnNewStack();
+
+                if(stacks.Count == stackCount)
+                {
+                    finishStack.FinishPlayerMoveTarget.position = new Vector3(playerPath[playerPath.Count - 1].position.x, finishStack.FinishPlayerMoveTarget.position.y, finishStack.FinishPlayerMoveTarget.position.z);
+                    playerPath.Add(finishStack.FinishPlayerMoveTarget);
+
+                    GameController.Instance.WinGame();
+                }
+                else
+                {
+                    stackSpawner.SpawnNewStack();
+                }
             }
         }
 
