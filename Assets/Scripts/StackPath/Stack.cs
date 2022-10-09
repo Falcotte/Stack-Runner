@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using StackRunner.InputSystem;
 
 namespace StackRunner.StackSystem
@@ -7,10 +8,15 @@ namespace StackRunner.StackSystem
     {
         [SerializeField] private MeshRenderer stackMeshRenderer;
 
+        [SerializeField] private Transform[] playerMoveTargets;
+        public Transform[] PlayerMoveTargets => playerMoveTargets;
+
         [SerializeField] private float moveSpeed;
 
         private Vector3 moveDirection;
         private bool isMoving;
+
+        public static UnityAction<Stack> OnPlaceStack;
 
         private void OnEnable()
         {
@@ -50,6 +56,7 @@ namespace StackRunner.StackSystem
         private void PlaceStack()
         {
             InputController.OnTouchDown -= PlaceStack;
+            OnPlaceStack?.Invoke(this);
 
             isMoving = false;
         }
