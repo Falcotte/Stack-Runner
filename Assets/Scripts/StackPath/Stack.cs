@@ -8,6 +8,8 @@ namespace StackRunner.StackSystem
     {
         [SerializeField] private Transform stackVisual;
         public Transform StackVisual => stackVisual;
+        [SerializeField] private StackVisual stackVisualController;
+        public StackVisual StackVisualController => stackVisualController;
 
         [SerializeField] private Rigidbody stackRigidbody;
         [SerializeField] private BoxCollider stackCollider;

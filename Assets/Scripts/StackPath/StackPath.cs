@@ -63,7 +63,7 @@ namespace StackRunner.StackSystem
                 Debug.Log("Perfect placement");
 
                 stack.transform.DOMoveX(playerPath[playerPath.Count - 1].position.x, .2f);
-                stack.transform.DOPunchScale(Vector3.one * .1f, .2f, 1, 1).SetEase(Ease.OutBack);
+                stack.StackVisualController.PlayPerfectPlacementAnimation();
 
                 stack.PlaceStack();
                 OnPerfectPlacement?.Invoke();

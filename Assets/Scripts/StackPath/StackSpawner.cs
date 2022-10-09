@@ -9,6 +9,8 @@ namespace StackRunner.StackSystem
         [SerializeField] private StackPath stackPath;
         [SerializeField] private float stackSpawnOffset;
 
+        [SerializeField] private StackMaterialManager stackMaterialManager;
+
         private Vector3 spawnPosition;
 
         private void Start()
@@ -22,6 +24,7 @@ namespace StackRunner.StackSystem
             spawnPosition += Vector3.forward * 3f;
 
             Stack newStack = Instantiate(stackPrefab, newSpawnPosition, Quaternion.identity, transform);
+            newStack.StackVisualController.SetMaterial(stackMaterialManager.GetMaterial());
 
             // The first spawned stack doesn't need to be adjusted
             if(stackPath.Stacks.Count > 0)
