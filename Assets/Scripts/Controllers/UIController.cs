@@ -5,7 +5,7 @@ using DG.Tweening;
 using TMPro;
 using StackRunner.Player;
 
-namespace StackRunner
+namespace StackRunner.UI
 {
     public class UIController : MonoBehaviour
     {
@@ -13,6 +13,8 @@ namespace StackRunner
 
         [SerializeField] private Button playAgainButton;
         [SerializeField] private Button tryAgainButton;
+
+        [SerializeField] private Transitioner transitioner;
 
         private void OnEnable()
         {
@@ -37,6 +39,10 @@ namespace StackRunner
 
             tryAgainButton.enabled = false;
             tryAgainButton.transform.localScale = Vector3.zero;
+
+            transitioner.OpenImmediately();
+
+            transitioner.CloseTransitioner(1f);
         }
 
         private void UpdateCollectedGoldAmount(int amount)
@@ -66,9 +72,17 @@ namespace StackRunner
         {
             playAgainButton.enabled = false;
 
-            DOTween.KillAll();
-
-            SceneManager.LoadScene("GameScene");
+            Sequence playAgainSequence = DOTween.Sequence();
+            playAgainSequence.AppendCallback(() =>
+            {
+                transitioner.OpenTransitioner(1f);
+            });
+            playAgainSequence.AppendInterval(1f);
+            playAgainSequence.AppendCallback(() =>
+            {
+                DOTween.KillAll();
+                SceneManager.LoadScene("GameScene");
+            });
         }
 
         private void ShowTryAgainButton()
@@ -88,9 +102,17 @@ namespace StackRunner
         {
             tryAgainButton.enabled = false;
 
-            DOTween.KillAll();
-
-            SceneManager.LoadScene("GameScene");
+            Sequence tryAgainSequence = DOTween.Sequence();
+            tryAgainSequence.AppendCallback(() =>
+            {
+                transitioner.OpenTransitioner(1f);
+            });
+            tryAgainSequence.AppendInterval(1f);
+            tryAgainSequence.AppendCallback(() =>
+            {
+                DOTween.KillAll();
+                SceneManager.LoadScene("GameScene");
+            });
         }
     }
 }

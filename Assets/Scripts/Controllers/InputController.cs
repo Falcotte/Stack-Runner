@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using StackRunner.UI;
 
 namespace StackRunner.InputSystem
 {
@@ -7,13 +8,29 @@ namespace StackRunner.InputSystem
     {
         public static UnityAction OnTouchDown;
 
+        private bool inputEnabled;
+
+        private void OnEnable()
+        {
+            Transitioner.OnTransitionerOpen += DisableInput;
+            Transitioner.OnTransitionerClose += EnableInput;
+        }
+
+        private void OnDisable()
+        {
+            Transitioner.OnTransitionerOpen -= DisableInput;
+            Transitioner.OnTransitionerClose -= EnableInput;
+        }
+
         private void Update()
         {
-#if UNITY_EDITOR || UNITY_STANDALONE
-            if(Input.GetMouseButtonDown(0))
+            if(inputEnabled)
             {
-                OnTouchDown?.Invoke();
-            }
+#if UNITY_EDITOR || UNITY_STANDALONE
+                if(Input.GetMouseButtonDown(0))
+                {
+                    OnTouchDown?.Invoke();
+                }
 #elif UNITY_IOS || UNITY_ANDROID
             if(Input.touchCount > 0)
             {
@@ -25,6 +42,17 @@ namespace StackRunner.InputSystem
                 }
             }
 #endif
+            }
+        }
+
+        private void EnableInput()
+        {
+            inputEnabled = true;
+        }
+
+        private void DisableInput()
+        {
+            inputEnabled = false;
         }
     }
 }
