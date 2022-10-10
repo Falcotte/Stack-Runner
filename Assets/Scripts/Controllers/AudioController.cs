@@ -1,5 +1,6 @@
 using UnityEngine;
 using StackRunner.StackSystem;
+using StackRunner.Player;
 
 namespace StackRunner
 {
@@ -10,6 +11,8 @@ namespace StackRunner
         [SerializeField] private AudioClip cutClip;
         [SerializeField] private AudioClip perfectClip;
 
+        [SerializeField] private AudioClip noClip;
+
         [SerializeField] private float perfectPitchIncreaseAmount;
         private float currentPitch = 1f;
 
@@ -17,12 +20,16 @@ namespace StackRunner
         {
             StackPath.OnPlacement += PlayCutClip;
             StackPath.OnPerfectPlacement += PlayPerfectClip;
+
+            PlayerController.OnPlayerFall += PlayNoClip;
         }
 
         private void OnDisable()
         {
             StackPath.OnPlacement -= PlayCutClip;
             StackPath.OnPerfectPlacement -= PlayPerfectClip;
+
+            PlayerController.OnPlayerFall -= PlayNoClip;
         }
 
         private void PlayCutClip()
@@ -43,6 +50,14 @@ namespace StackRunner
             currentPitch = Mathf.Clamp(currentPitch, 1f, 3f);
 
             audioSource.pitch = currentPitch;
+        }
+
+        private void PlayNoClip()
+        {
+            currentPitch = 1f;
+
+            audioSource.clip = noClip;
+            audioSource.Play();
         }
     }
 }
