@@ -58,7 +58,7 @@ namespace StackRunner.StackSystem
         {
             float stackPlacementOffset = stack.transform.position.x - playerPath[playerPath.Count - 1].position.x;
 
-            if(Mathf.Abs(stackPlacementOffset) <= perfectPlacementThreshold)
+            if(Mathf.Abs(stackPlacementOffset) <= perfectPlacementThreshold && Mathf.Abs(stack.transform.position.x - stack.LastStackXPosition) <= stack.StackWidth)
             {
                 stack.transform.DOMoveX(playerPath[playerPath.Count - 1].position.x, .2f);
                 stack.StackVisualController.PlayPerfectPlacementAnimation();

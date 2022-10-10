@@ -54,7 +54,8 @@ namespace StackRunner
 
         private void PlayNoClip()
         {
-            currentPitch = 1f;
+            currentPitch = 1.6f;
+            audioSource.pitch = currentPitch;
 
             audioSource.clip = noClip;
             audioSource.Play();
