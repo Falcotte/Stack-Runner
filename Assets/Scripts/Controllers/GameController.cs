@@ -34,6 +34,14 @@ namespace StackRunner
             InputController.OnTouchDown -= EvaluatePlayerAction;
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 60;
+        }
+
         public void EvaluatePlayerAction()
         {
             if(currentState == GameState.Idle)
