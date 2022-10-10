@@ -119,7 +119,21 @@ namespace StackRunner.Player
 
             isFailing = true;
             StartMovement();
-            ;
+        }
+
+        public void CollectGoldCoin()
+        {
+
+        }
+
+        public void CollectStar()
+        {
+
+        }
+
+        public void CollectDiamond()
+        {
+
         }
     }
 }

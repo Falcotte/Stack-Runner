@@ -60,8 +60,6 @@ namespace StackRunner.StackSystem
 
             if(Mathf.Abs(stackPlacementOffset) <= perfectPlacementThreshold)
             {
-                Debug.Log("Perfect placement");
-
                 stack.transform.DOMoveX(playerPath[playerPath.Count - 1].position.x, .2f);
                 stack.StackVisualController.PlayPerfectPlacementAnimation();
 
