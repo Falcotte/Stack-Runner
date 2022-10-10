@@ -179,6 +179,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8626176151339644926}
     m_Modifications:
+    - target: {fileID: 836846858463804239, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 853151257147079781, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 969886199417429755, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}
       propertyPath: m_Name
       value: Gold_Coin
@@ -237,6 +245,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5451448023584767122, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168633866741333094, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6778391299045229721, guid: 14daa27190f5ab949987d635cdbc5801, type: 3}

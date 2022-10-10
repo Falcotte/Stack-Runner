@@ -24,8 +24,14 @@ namespace StackRunner.Player
         private bool isMoving;
         private bool isFailing;
 
+        private int collectedGoldAmount;
+        private int collectedStarsAmount;
+        private int collectedDiamondAmount;
+
         public static UnityAction OnPlayerFall;
         public static UnityAction OnPlayerReachFinishStack;
+
+        public static UnityAction<int> OnGoldCollect;
 
         private void OnEnable()
         {
@@ -123,17 +129,18 @@ namespace StackRunner.Player
 
         public void CollectGoldCoin()
         {
-
+            collectedGoldAmount++;
+            OnGoldCollect?.Invoke(collectedGoldAmount);
         }
 
         public void CollectStar()
         {
-
+            collectedStarsAmount++;
         }
 
         public void CollectDiamond()
         {
-
+            collectedDiamondAmount++;
         }
     }
 }
