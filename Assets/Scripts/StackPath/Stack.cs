@@ -21,7 +21,10 @@ namespace StackRunner.StackSystem
 
         [SerializeField] private float moveSpeed;
 
+        private bool isCut;
+
         public float StackWidth { get; set; }
+        public float CurrentStackXPosition { get; set; }
         public float LastStackXPosition { get; set; }
 
         public static UnityAction OnPlaceStack;
@@ -30,6 +33,7 @@ namespace StackRunner.StackSystem
         private void Start()
         {
             StackWidth = stackVisual.localScale.x;
+            stackCollider.size = new Vector3(StackWidth, stackCollider.size.y, stackCollider.size.z);
 
             stackVisual.localScale = Vector3.zero;
             stackVisual.DOScale(new Vector3(StackWidth, 1f, 3f), .25f).SetEase(Ease.OutBack);
@@ -57,6 +61,11 @@ namespace StackRunner.StackSystem
             {
                 OnPlaceStack?.Invoke();
             }
+
+            if(!isCut)
+            {
+                CurrentStackXPosition = transform.position.x;
+            }
         }
 
         public void CutStack(float previousStackPosition, float cutPosition)
@@ -65,6 +74,8 @@ namespace StackRunner.StackSystem
 
             stackVisual.gameObject.SetActive(false);
             stackCollider.enabled = false;
+
+            isCut = true;
 
             foreach(var stackPart in stackParts)
             {
@@ -82,6 +93,8 @@ namespace StackRunner.StackSystem
                 Destroy(stackParts[0].gameObject, 4f);
                 StackWidth = stackParts[1].transform.localScale.x;
                 UpdatePlayerMoveTargets(stackParts[0].transform.position.x + StackWidth / 2f);
+
+                CurrentStackXPosition = stackParts[1].transform.position.x + StackWidth / 2f;
             }
             else // Cut right
             {
@@ -90,6 +103,8 @@ namespace StackRunner.StackSystem
 
                 StackWidth = stackParts[0].transform.localScale.x;
                 UpdatePlayerMoveTargets(stackParts[0].transform.position.x - StackWidth / 2f);
+
+                CurrentStackXPosition = stackParts[0].transform.position.x - StackWidth / 2f;
             }
 
             OnPlaceStack?.Invoke();

@@ -32,7 +32,7 @@ namespace StackRunner.StackSystem
                 newStack.StackWidth = stackPath.Stacks[stackPath.Stacks.Count - 1].StackWidth;
                 newStack.StackVisual.transform.localScale = new Vector3(newStack.StackWidth, newStack.StackVisual.transform.localScale.y, newStack.StackVisual.transform.localScale.z);
 
-                newStack.LastStackXPosition = stackPath.Stacks[stackPath.Stacks.Count - 1].transform.position.x;
+                newStack.LastStackXPosition = stackPath.Stacks[stackPath.Stacks.Count - 1].CurrentStackXPosition;
             }
 
             stackPath.Stacks.Add(newStack);
