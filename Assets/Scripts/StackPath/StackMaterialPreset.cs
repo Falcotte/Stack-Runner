@@ -10,6 +10,11 @@ namespace StackRunner.StackSystem
 
         private int index;
 
+        public void ResetIndex()
+        {
+            index = 0;
+        }
+
         public Material GetNextMaterial()
         {
             return materials[index++ % materials.Count];
