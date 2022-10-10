@@ -71,6 +71,7 @@ namespace StackRunner.UI
         public void PlayAgain()
         {
             playAgainButton.enabled = false;
+            playAgainButton.transform.DOScale(0f, .25f);
 
             Sequence playAgainSequence = DOTween.Sequence();
             playAgainSequence.AppendCallback(() =>
@@ -101,6 +102,7 @@ namespace StackRunner.UI
         public void TryAgain()
         {
             tryAgainButton.enabled = false;
+            tryAgainButton.transform.DOScale(0f, .25f);
 
             Sequence tryAgainSequence = DOTween.Sequence();
             tryAgainSequence.AppendCallback(() =>
